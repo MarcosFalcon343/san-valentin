@@ -211,7 +211,7 @@ export default function Home() {
 
 
       {/* Elemento de audio */}
-      <audio ref={audioRef} src="/sonido01.mp3" />
+      <audio ref={audioRef} src="/fondo.mp3" />
     </div>
   );
 }
