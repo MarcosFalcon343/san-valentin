@@ -1,0 +1,14 @@
+.carousel-container {
+    width: 300px; /* Ajusta el ancho del carrusel */
+    height: 200px; /* Ajusta la altura del carrusel */
+    overflow: hidden; /* Oculta las imágenes que se salen del contenedor */
+  }
+  
+  .carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la forma en que se escala la imagen */
+  }
+  
+  /* Opcional: Estilos para las flores y otros elementos */
+  /* ... */

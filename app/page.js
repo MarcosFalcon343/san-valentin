@@ -1,101 +1,216 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { Fireworks } from "fireworks-js";
+import "./flowers.css";
+import "./collage.css";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [clickedYes, setClickedYes] = useState(false);
+  const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
+  const [currentImage, setCurrentImage] = useState(0);
+  const [flowers, setFlowers] = useState([]);
+  const [hearts, setHearts] = useState([]);
+  const fireworksContainer = useRef(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  // Nuevo estado para el control del audio
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+
+  const images = [
+    "/img/img1.jpg",
+    "/img/img2.jpg",
+    "/img/img3.jpg",
+    "/img/img4.jpg",
+    "/img/img5.jpg",
+    "/img/img6.jpg",
+    "/img/img7.jpg",
+    "/img/img8.jpg",
+    "/img/img9.jpg",
+    "/img/img10.jpg",
+    "/img/img11.jpg",
+    "/img/img12.jpg",
+    "/img/img13.jpg",
+    "/img/img14.jpg",
+    "/img/img15.jpg",
+    "/img/img16.jpg",
+    "/img/img17.jpg",
+    "/img/img18.jpg",
+    "/img/img19.jpg",
+    "/img/img20.jpg",
+  ];
+
+  // Cambia la imagen automáticamente cada 3 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Genera flores animadas aleatorias
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newFlower = {
+        id: Date.now(),
+        left: `${Math.random() * 100}%`, // Posición aleatoria en X
+        delay: `${Math.random() * 5}s`, // Retraso aleatorio
+      };
+      setFlowers((prev) => [...prev, newFlower]);
+    }, Math.random() * (1500 - 500) + 500); // Intervalo aleatorio
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (clickedYes) {
+      const interval = setInterval(() => {
+        const newHeart = {
+          
+          id: Date.now(),
+          left: `${Math.random() * 90}%`,
+          size: `${Math.random() * 30 + 10}px`,
+          delay: Math.random() * 2,
+        };
+        setHearts((prev) => [...prev, newHeart]);
+  
+        // Eliminar el corazón después de 4 segundos
+        setTimeout(() => {
+          setHearts((prev) => prev.filter((heart) => heart.id !== newHeart.id));
+        }, 4000);
+      }, 300);
+  
+      return () => clearInterval(interval);
+    }
+  }, [clickedYes]);
+
+  // Función para controlar la reproducción y pausa del audio
+  const toggleAudio = () => {
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-pink-100 text-center p-6 relative">
+      {/* Carrusel */}
+      <div className="relative w-[320px] h-[320px] overflow-hidden rounded-lg shadow-lg">
+        <motion.img
+          key={currentImage}
+          src={images[currentImage]}
+          alt={`Imagen ${currentImage + 1}`}
+          className="w-full h-full object-cover"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        />
+        <button
+          onClick={() =>
+            setCurrentImage((prev) => (prev - 1 + images.length) % images.length)
+          }
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full"
+        >
+          ⬅️
+        </button>
+        <button
+          onClick={() =>
+            setCurrentImage((prev) => (prev + 1) % images.length)
+          }
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full"
+        >
+          ➡️
+        </button>
+      </div>
+
+      <h1 className="text-4xl font-bold text-red-500 mt-6">¿Quieres ser mi San Valentín? ❤️</h1>
+
+      {clickedYes ? (
+        <p className="text-2xl text-green-600 font-bold">¡Sabía que dirías que sí! 🎉💖</p>
+      ) : (
+        <div className="flex space-x-4 mt-4 relative">
+          <button
+            onClick={() => setClickedYes(true)}
+            className="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg hover:bg-red-600 transition"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Sí 💘
+          </button>
+          <motion.button
+            onClick={() =>
+              setNoPosition({ x: Math.random() * 400 - 200, y: Math.random() * 200 - 100 })
+            }
+            animate={{ x: noPosition.x + 20, y: noPosition.y }} // Mueve 20px a la derecha
+            transition={{ type: "spring", stiffness: 200 }}
+            className="bg-gray-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg cursor-pointer"
           >
-            Read our docs
-          </a>
+            No 😢
+          </motion.button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      )}
+
+      {/* Animación de flores */}
+      <div className="flowers-container">
+        {flowers.map((flower) => (
+          <motion.div
+            key={flower.id}
+            className={`flower flower${(flower.id % 6) + 1}`}
+            initial={{ bottom: '-10%' }}
+            animate={{ bottom: '100vh', bottom: '-2%' }}
+            transition={{
+              type: 'spring',
+              stiffness: 100,
+              damping: 20,
+              delay: flower.delay,
+              repeat: Infinity,
+              repeatType: "loop",
+            }}
+            style={{ left: flower.left }}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        ))}
+      </div>
+
+      {/* Animación de corazones */}
+      {clickedYes && (
+        <div className="hearts-container absolute top-0 left-0 w-full h-full pointer-events-none">
+          {hearts.map((heart) => (
+            <motion.div
+              key={heart.id}
+              className="absolute text-red-500"
+              initial={{ bottom: "-10%", opacity: 0 }}
+              animate={{ bottom: "100%", opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: 4,
+                ease: "easeOut",
+                delay: heart.delay,
+              }}
+              style={{
+                left: heart.left,
+                fontSize: heart.size,
+              }}
+            >
+              ❤️
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {/* Fuegos artificiales */}
+      <div ref={fireworksContainer} className="absolute top-0 left-0 w-full h-full pointer-events-none"></div>
+
+      {/* Botón de audio */}
+      <button
+        onClick={toggleAudio}
+        className={`fixed bottom-4 right-4 p-4 rounded-full ${isPlaying ? "bg-red-700" : "bg-red-500"}`}
+      >
+        {isPlaying ? "Pausar 🎵" : "Reproducir 🎶"}
+      </button>
+
+      {/* Elemento de audio */}
+      <audio ref={audioRef} src="/sonido01.mp3" />
     </div>
   );
 }

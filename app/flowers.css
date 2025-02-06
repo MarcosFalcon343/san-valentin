@@ -1,0 +1,58 @@
+/* Evitar que las flores causen scroll */
+body {
+    overflow: hidden;
+    margin: 0;
+}
+
+/* Contenedor de flores */
+.flowers-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Estilo base de las flores */
+.flower {
+    position: absolute;
+    font-size: 24px;
+    animation: animate-flower 8s linear infinite;
+}
+
+/* Agregar colores aleatorios */
+.flower:after {
+    content: "✿";
+    position: absolute;
+    text-shadow: 0 0 5px white;
+}
+
+/* Variantes de color */
+.flower1:after { color: #ff4081; }  /* Rosa */
+.flower2:after { color: #ffeb3b; }  /* Amarillo */
+.flower3:after { color: #4caf50; }  /* Verde */
+.flower4:after { color: #3f51b5; }  /* Azul */
+.flower5:after { color: #ff9800; }  /* Naranja */
+.flower6:after { color: #9c27b0; }  /* Morado */
+
+/* Animación de las flores */
+@keyframes animate-flower {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(360deg); /* Mover hasta la parte superior */
+        opacity: 0;
+    }
+}
+
+/* Posición y tiempos de las flores */
+.flower1 { left: 10%; animation-delay: 0s; }
+.flower2 { left: 25%; animation-delay: 1s; }
+.flower3 { left: 40%; animation-delay: 2s; }
+.flower4 { left: 55%; animation-delay: 3s; }
+.flower5 { left: 70%; animation-delay: 4s; }
+.flower6 { left: 85%; animation-delay: 5s; }
