@@ -13,6 +13,7 @@ export default function Home() {
   const [flowers, setFlowers] = useState([]);
   const [hearts, setHearts] = useState([]);
   const fireworksContainer = useRef(null);
+  const fireworksInstance = useRef(null);
 
   // Nuevo estado para el control del audio
   const [isPlaying, setIsPlaying] = useState(false);
@@ -41,6 +42,31 @@ export default function Home() {
     "/img/img20.jpg",
   ];
 
+    // Activar fuegos artificiales al hacer clic en "Sí"
+    useEffect(() => {
+      if (clickedYes && fireworksContainer.current) {
+        fireworksInstance.current = new Fireworks(fireworksContainer.current, {
+          autoresize: true,
+          opacity: 0.5,
+          acceleration: 1.05,
+          friction: 0.97,
+          gravity: 1.5,
+          particles: 150,
+          trace: 3,
+          explosion: 5,
+          brightness: { min: 50, max: 80 },
+          decay: { min: 0.015, max: 0.03 },
+          delay: { min: 30, max: 60 },
+        });
+  
+        fireworksInstance.current.start();
+  
+        // Detener fuegos artificiales después de 10 segundos
+        setTimeout(() => {
+          fireworksInstance.current.stop();
+        }, 10000);
+      }
+    }, [clickedYes]);
   // Cambia la imagen automáticamente cada 3 segundos
   useEffect(() => {
     const interval = setInterval(() => {
@@ -198,9 +224,10 @@ export default function Home() {
         </div>
       )}
 
-      {/* Fuegos artificiales */}
-      <div ref={fireworksContainer} className="absolute top-0 left-0 w-full h-full pointer-events-none"></div>
-
+<div
+        ref={fireworksContainer}
+        className="absolute top-0 left-0 w-full h-full pointer-events-none"
+      ></div>
       {/* Botón de audio */}
       <button
         onClick={toggleAudio}
