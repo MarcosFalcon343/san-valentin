@@ -67,7 +67,7 @@ export default function Home() {
     if (clickedYes) {
       const interval = setInterval(() => {
         const newHeart = {
-          
+
           id: Date.now(),
           left: `${Math.random() * 90}%`,
           size: `${Math.random() * 30 + 10}px`,
@@ -208,6 +208,7 @@ export default function Home() {
       >
         {isPlaying ? "Pausar 🎵" : "Reproducir 🎶"}
       </button>
+
 
       {/* Elemento de audio */}
       <audio ref={audioRef} src="/sonido01.mp3" />
