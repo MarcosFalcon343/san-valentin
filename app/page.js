@@ -42,31 +42,31 @@ export default function Home() {
     "/img/img20.jpg",
   ];
 
-    // Activar fuegos artificiales al hacer clic en "Sí"
-    useEffect(() => {
-      if (clickedYes && fireworksContainer.current) {
-        fireworksInstance.current = new Fireworks(fireworksContainer.current, {
-          autoresize: true,
-          opacity: 0.5,
-          acceleration: 1.05,
-          friction: 0.97,
-          gravity: 1.5,
-          particles: 150,
-          trace: 3,
-          explosion: 5,
-          brightness: { min: 50, max: 80 },
-          decay: { min: 0.015, max: 0.03 },
-          delay: { min: 30, max: 60 },
-        });
-  
-        fireworksInstance.current.start();
-  
-        // Detener fuegos artificiales después de 10 segundos
-        setTimeout(() => {
-          fireworksInstance.current.stop();
-        }, 10000);
-      }
-    }, [clickedYes]);
+  // Activar fuegos artificiales al hacer clic en "Sí"
+  useEffect(() => {
+    if (clickedYes && fireworksContainer.current) {
+      fireworksInstance.current = new Fireworks(fireworksContainer.current, {
+        autoresize: true,
+        opacity: 0.5,
+        acceleration: 1.05,
+        friction: 0.97,
+        gravity: 1.5,
+        particles: 150,
+        trace: 3,
+        explosion: 5,
+        brightness: { min: 50, max: 80 },
+        decay: { min: 0.015, max: 0.03 },
+        delay: { min: 30, max: 60 },
+      });
+
+      fireworksInstance.current.start();
+
+      // Detener fuegos artificiales después de 10 segundos
+      setTimeout(() => {
+        fireworksInstance.current.stop();
+      }, 10000);
+    }
+  }, [clickedYes]);
   // Cambia la imagen automáticamente cada 3 segundos
   useEffect(() => {
     const interval = setInterval(() => {
@@ -100,13 +100,13 @@ export default function Home() {
           delay: Math.random() * 2,
         };
         setHearts((prev) => [...prev, newHeart]);
-  
+
         // Eliminar el corazón después de 4 segundos
         setTimeout(() => {
           setHearts((prev) => prev.filter((heart) => heart.id !== newHeart.id));
         }, 4000);
       }, 300);
-  
+
       return () => clearInterval(interval);
     }
   }, [clickedYes]);
@@ -122,7 +122,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-pink-100 text-center p-6 relative">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-100 text-center p-6 relative">
       {/* Carrusel */}
       <div className="relative w-[320px] h-[320px] overflow-hidden rounded-lg shadow-lg">
         <motion.img
@@ -152,7 +152,7 @@ export default function Home() {
         </button>
       </div>
 
-      <h1 className="text-4xl font-bold text-red-500 mt-6">¿Quieres ser mi San Valentín? ❤️</h1>
+      <h1 className="text-4xl font-bold text-red-500 mt-6">Te extraño ❤️</h1>
 
       {clickedYes ? (
         <p className="text-2xl text-green-600 font-bold">¡Sabía que dirías que sí! 🎉💖</p>
@@ -224,7 +224,7 @@ export default function Home() {
         </div>
       )}
 
-<div
+      <div
         ref={fireworksContainer}
         className="absolute top-0 left-0 w-full h-full pointer-events-none"
       ></div>
